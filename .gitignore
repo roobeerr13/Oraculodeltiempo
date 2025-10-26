@@ -29,6 +29,7 @@ dist/
 # Data and outputs
 outputs/
 data/*.zip
+data/*.txt
 
 # Local env files
 .env
