@@ -30,6 +30,7 @@ dist/
 outputs/
 data/*.zip
 data/*.txt
+data/household_power_consumption.txt
 
 # Local env files
 .env
