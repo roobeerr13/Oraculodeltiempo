@@ -16,11 +16,11 @@
             </form>
         </div>
 
-        {% if prediction %}
+        {% if prediction is not none %}
         <div class="prediction">
             <h2>Predicción:</h2>
-            <p>El consumo eléctrico previsto es: <strong>{{ prediction:.2f }}</strong> unidades</p>
-            <p>Predicción realizada el: {{ timestamp }}</p>
+            <p>El consumo eléctrico previsto es: <strong>{{ '%.2f' % prediction }}</strong> unidades</p>
+            <p class="timestamp">Predicción realizada el: {{ timestamp }}</p>
         </div>
         {% endif %}
 
