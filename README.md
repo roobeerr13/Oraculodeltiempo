@@ -78,9 +78,55 @@ C:/Users/rober/Documents/GitHub/Oraculodeltiempo/.venv/Scripts/python.exe C:/Use
 
 Tras la ejecución encontrarás los arrays listos para alimentar un modelo LSTM en la carpeta `outputs/`.
 
-Notas y mejoras futuras:
+## Fase 3 — Modelo LSTM y Aplicación Web
 
-- Parametrizar `look_back` y la columna objetivo como argumentos CLI para experimentar sin editar código.
-- Añadir tests unitarios que validen `create_dataset` con series sintéticas (happy path y casos con pocos datos).
-- Implementar pipelines de entrenamiento y evaluación utilizando los arrays ya generados.
+En esta fase hemos implementado el modelo LSTM y creado una interfaz web para interactuar con él:
 
+### Estructura del Modelo
+
+- `src/model.py` — Define la arquitectura del modelo LSTM
+- `src/training.py` — Contiene la lógica de entrenamiento y guardado del modelo
+- `models/lstm_model.h5` — Modelo entrenado serializado
+
+### Interfaz Web
+
+- `app.py` — Servidor Flask para la aplicación web
+- `templates/index.html` — Plantilla HTML para la interfaz
+- `static/style.css` — Estilos CSS para la interfaz
+
+### Cómo ejecutar el proyecto completo:
+
+1. Instala las dependencias (si no lo has hecho ya):
+```powershell
+pip install -r requirements.txt
+```
+
+2. Preprocesa los datos y entrena el modelo:
+```powershell
+python main.py  # Preprocesamiento
+python src/training.py  # Entrenamiento
+```
+
+3. Inicia la aplicación web:
+```powershell
+python app.py
+```
+
+4. Abre http://localhost:5000 en tu navegador para interactuar con el modelo
+
+### Características implementadas:
+
+- Modelo LSTM con dos capas para predicción de series temporales
+- Interfaz web minimalista y responsive
+- Visualización de predicciones en tiempo real
+- Manejo de errores y feedback visual
+- Almacenamiento de modelo entrenado
+- Predicciones basadas en los últimos datos disponibles
+
+### Mejoras futuras:
+
+- Añadir gráficas interactivas de predicciones
+- Implementar reentrenamiento desde la interfaz web
+- Añadir panel de configuración del modelo
+- Incluir historial de predicciones
+- Mejorar la validación y visualización de errores
