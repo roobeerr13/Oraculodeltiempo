@@ -1,17 +1,3 @@
-"""Evaluate trained LSTM model: predict, inverse-transform, plot and save results.
-
-Usage:
-    python src/evaluate.py
-
-This script expects:
-- Trained model at `models/lstm_model.h5`
-- Preprocessed arrays in `outputs/` (X_test.npy, y_test.npy)
-- Trained scaler at `outputs/scaler.joblib` or similar
-
-Outputs:
-- Plot saved to `reports/figures/lstm_predictions.png`
-- Arrays saved to `data/results/y_test_original.npy` and `data/results/y_pred_original.npy`
-"""
 from __future__ import annotations
 import os
 import numpy as np
