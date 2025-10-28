@@ -104,6 +104,21 @@ img { max-width: 100%; display: block; margin-top: 12px; border-radius: 10px }
     animation: floaty 8s ease-in-out infinite;
 }
 
+/* Evaluation layout */
+.evaluation { margin-top: 22px; padding: 12px; border-radius: 10px; background: rgba(6,12,22,0.25); border: 1px solid rgba(58,138,255,0.04) }
+.eval-row { display:flex; gap: 12px; align-items:flex-start }
+.eval-col { flex: 1 }
+.eval-col img { border-radius: 8px; box-shadow: 0 8px 30px rgba(0,110,255,0.06) }
+
+.interaction-sep { height: 1px; background: linear-gradient(90deg, transparent, rgba(58,138,255,0.06), transparent); margin: 20px 0 }
+.manual-area { margin-top: 18px }
+.manual-result { margin-top: 10px; padding: 12px; border-radius: 10px; background: rgba(3,6,12,0.36); border: 1px solid rgba(80,170,255,0.06) }
+.manual-result.highlight { box-shadow: 0 8px 30px rgba(30,140,255,0.14); transform: translateY(-2px); transition: transform 200ms }
+
+/* subtle pulsing glow for new predictions */
+@keyframes pulseGlow { 0% { box-shadow: 0 0 0 rgba(0,160,255,0.0) } 50% { box-shadow: 0 0 30px rgba(0,160,255,0.12) } 100% { box-shadow: 0 0 0 rgba(0,160,255,0.0) } }
+.manual-result.highlight { animation: pulseGlow 2s ease-in-out 1 }
+
 /* Responsive tweaks */
 @media (max-width: 720px) {
     .model-info { flex-direction: column; align-items: flex-start }

@@ -49,10 +49,21 @@
         {% endif %}
 
         {% if plot_exists %}
-        <div style="margin-top:20px;">
-            <h2>Evaluación del Modelo</h2>
-            <p>Gráfica de predicciones vs reales:</p>
-            <img src="/report/figure" alt="LSTM predictions" style="max-width:100%; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
+        <div class="evaluation">
+            <h2>Evaluación sobre dataset</h2>
+            <p>Predicciones vs reales:</p>
+            <div class="eval-row">
+                <div class="eval-col">
+                    <img src="/report/figure" alt="Predicciones vs reales">
+                </div>
+                <div class="eval-col">
+                    <p>Series de error:</p>
+                    <img src="/report/error_series" alt="Error series">
+                    <p>Distribución del error:</p>
+                    <img src="/report/error_hist" alt="Error histogram">
+                </div>
+            </div>
+            <p class="model-note">Métricas: {% if mse is not none %}MSE = <strong>{{ '%.4f' % mse }}</strong>{% else %}No calculadas{% endif %}</p>
         </div>
         {% endif %}
 
@@ -61,6 +72,20 @@
             <p style="color: red;">{{ error }}</p>
         </div>
         {% endif %}
+        
+        <div class="interaction-sep"></div>
+
+        <div class="manual-area">
+            <h2>Interacción</h2>
+            <p>Usa el botón rápido para predecir usando el dataset de prueba o introduce tu secuencia manual para obtener una predicción inmediata.</p>
+            {% if prediction is defined and prediction is not none %}
+            <div class="manual-result {{ 'highlight' if request.form.get('manual_sequence') else '' }}">
+                <h3>Resultado de la predicción</h3>
+                <p>Valor predicho: <strong>{{ '%.2f' % prediction }}</strong></p>
+                <p class="timestamp">{{ timestamp }}</p>
+            </div>
+            {% endif %}
+        </div>
     </div>
 </body>
 </html>

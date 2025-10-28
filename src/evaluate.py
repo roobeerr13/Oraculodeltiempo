@@ -112,6 +112,33 @@ def evaluate_and_save():
     plt.savefig(out_path)
     plt.close()
     print(f"Saved plot to: {out_path}")
+    
+    # Error series (absolute error over samples)
+    error = y_pred_orig - y_test_orig
+    plt.figure(figsize=(12, 3.5))
+    plt.plot(x, error, color='#ff7f50', label='Error (pred - real)')
+    plt.hlines(0, x.min(), x.max(), colors='gray', linestyles='dashed', alpha=0.6)
+    plt.title('Error por muestra (pred - real)')
+    plt.xlabel('Muestra')
+    plt.ylabel('Error (kWh)')
+    plt.legend()
+    plt.tight_layout()
+    err_path = os.path.join('reports', 'figures', 'lstm_error_series.png')
+    plt.savefig(err_path)
+    plt.close()
+    print(f"Saved error series to: {err_path}")
+
+    # Error histogram
+    plt.figure(figsize=(6, 4))
+    plt.hist(error, bins=40, color='#6ea8fe', alpha=0.9)
+    plt.title('Distribución del error (pred - real)')
+    plt.xlabel('Error (kWh)')
+    plt.ylabel('Frecuencia')
+    plt.tight_layout()
+    hist_path = os.path.join('reports', 'figures', 'lstm_error_hist.png')
+    plt.savefig(hist_path)
+    plt.close()
+    print(f"Saved error histogram to: {hist_path}")
 
 
 if __name__ == '__main__':

@@ -88,6 +88,24 @@ def report_figure():
     else:
         return ("No figure available", 404)
 
+
+@app.route('/report/error_series')
+def report_error_series():
+    path = os.path.join('reports', 'figures', 'lstm_error_series.png')
+    if os.path.exists(path):
+        return send_file(path, mimetype='image/png')
+    else:
+        return ("No figure available", 404)
+
+
+@app.route('/report/error_hist')
+def report_error_hist():
+    path = os.path.join('reports', 'figures', 'lstm_error_hist.png')
+    if os.path.exists(path):
+        return send_file(path, mimetype='image/png')
+    else:
+        return ("No figure available", 404)
+
 @app.route('/predict', methods=['POST'])
 def predict():
     """Make a new prediction and display it."""
