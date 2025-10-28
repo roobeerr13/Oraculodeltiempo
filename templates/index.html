@@ -9,6 +9,20 @@
 <body>
     <div class="container">
         <h1>Predictor de Consumo Eléctrico</h1>
+
+        <div class="model-info">
+            {% if model_description %}
+            <p class="model-desc"><strong>Modelo:</strong> {{ model_description }}</p>
+            {% else %}
+            <p class="model-desc"><strong>Modelo:</strong> No disponible. Entrena el modelo primero.</p>
+            {% endif %}
+
+            {% if mse is not none %}
+            <p class="model-metric"><strong>MSE (evaluación):</strong> {{ '%.4f' % mse }}</p>
+            {% else %}
+            <p class="model-metric"><strong>MSE (evaluación):</strong> No calculado. Ejecuta la evaluación.</p>
+            {% endif %}
+        </div>
         
         <div>
             <form action="/predict" method="post">

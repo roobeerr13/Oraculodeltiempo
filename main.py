@@ -12,6 +12,40 @@ import numpy as np
 import argparse
 from datetime import datetime
 from flask import Flask, render_template, request, send_file
+from sklearn.metrics import mean_squared_error
+
+
+def get_model_description():
+    """Return a short human-readable description of the loaded model."""
+    try:
+        model = load_model()
+    except Exception:
+        return None
+    parts = []
+    for layer in model.layers:
+        name = layer.__class__.__name__
+        cfg = ''
+        # try to extract units if present
+        if hasattr(layer, 'units'):
+            cfg = f"({getattr(layer, 'units')})"
+        parts.append(f"{name}{cfg}")
+    return ' → '.join(parts)
+
+
+def compute_evaluation_metric():
+    """Compute MSE from saved results if available (data/results/*.npy).
+    Returns float or None.
+    """
+    y_test_path = os.path.join('data', 'results', 'y_test_original.npy')
+    y_pred_path = os.path.join('data', 'results', 'y_pred_original.npy')
+    if os.path.exists(y_test_path) and os.path.exists(y_pred_path):
+        try:
+            y_test = np.load(y_test_path)
+            y_pred = np.load(y_pred_path)
+            return float(mean_squared_error(y_test, y_pred))
+        except Exception:
+            return None
+    return None
 from scripts.preprocess_power_consumption import main as preprocess_main
 
 # Initialize Flask app
@@ -38,7 +72,10 @@ def index():
     # Also indicate whether an evaluation plot is available
     plot_path = os.path.join('reports', 'figures', 'lstm_predictions.png')
     plot_exists = os.path.exists(plot_path)
-    return render_template('index.html', prediction=None, timestamp=None, plot_exists=plot_exists)
+    model_description = get_model_description()
+    mse = compute_evaluation_metric()
+    return render_template('index.html', prediction=None, timestamp=None, plot_exists=plot_exists,
+                           model_description=model_description, mse=mse)
 
 
 @app.route('/report/figure')
@@ -95,13 +132,19 @@ def predict():
             current_sequence = prepare_latest_data()
             prediction = model.predict(current_sequence)
 
+        model_description = get_model_description()
+        mse = compute_evaluation_metric()
         return render_template('index.html',
-                             prediction=float(prediction[0][0]),
-                             timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                             plot_exists=os.path.exists(os.path.join('reports','figures','lstm_predictions.png')))
-    
+                               prediction=float(prediction[0][0]),
+                               timestamp=datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                               plot_exists=os.path.exists(os.path.join('reports','figures','lstm_predictions.png')),
+                               model_description=model_description,
+                               mse=mse)
     except Exception as e:
-        return render_template('index.html', error=str(e), plot_exists=os.path.exists(os.path.join('reports','figures','lstm_predictions.png')))
+        model_description = get_model_description()
+        mse = compute_evaluation_metric()
+        return render_template('index.html', error=str(e), plot_exists=os.path.exists(os.path.join('reports','figures','lstm_predictions.png')),
+                               model_description=model_description, mse=mse)
 
 def main() -> int:
     parser = argparse.ArgumentParser(description="Power consumption forecasting pipeline")
