@@ -12,15 +12,33 @@
         
         <div>
             <form action="/predict" method="post">
-                <button type="submit">Obtener Nueva Predicción</button>
+                <button type="submit">Obtener Nueva Predicción (última secuencia)</button>
+            </form>
+
+            <hr>
+
+            <h2>Predicción manual</h2>
+            <p>Introduce una secuencia de valores separados por comas con la ventana temporal esperada (por ejemplo: 60 números).<br>
+               El modelo esperará la misma longitud de timesteps que en el entrenamiento.</p>
+            <form action="/predict" method="post">
+                <textarea name="manual_sequence" rows="4" style="width:100%;" placeholder="Ej: 0.12,0.11,0.15,..."></textarea>
+                <div style="margin-top:8px;"><button type="submit">Predecir con secuencia manual</button></div>
             </form>
         </div>
 
-        {% if prediction is not none %}
+        {% if prediction is defined and prediction is not none %}
         <div class="prediction">
             <h2>Predicción:</h2>
             <p>El consumo eléctrico previsto es: <strong>{{ '%.2f' % prediction }}</strong> unidades</p>
             <p class="timestamp">Predicción realizada el: {{ timestamp }}</p>
+        </div>
+        {% endif %}
+
+        {% if plot_exists %}
+        <div style="margin-top:20px;">
+            <h2>Evaluación del Modelo</h2>
+            <p>Gráfica de predicciones vs reales:</p>
+            <img src="/report/figure" alt="LSTM predictions" style="max-width:100%; border-radius:8px; box-shadow:0 2px 6px rgba(0,0,0,0.1);">
         </div>
         {% endif %}
 
