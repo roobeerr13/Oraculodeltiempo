@@ -79,8 +79,14 @@ def predict():
                 except Exception:
                     return render_template('index.html', error='No se puede determinar la ventana temporal (timesteps).', plot_exists=os.path.exists(os.path.join('reports','figures','lstm_predictions.png')))
 
-            if len(vals) != timesteps:
-                return render_template('index.html', error=f'Secuencia de longitud {len(vals)} no compatible. Se requieren exactamente {timesteps} valores.', plot_exists=os.path.exists(os.path.join('reports','figures','lstm_predictions.png')))
+            # If user provided a different length, allow padding/truncation:
+            if len(vals) < timesteps:
+                pad_len = timesteps - len(vals)
+                pad_value = vals[-1] if len(vals) > 0 else 0.0
+                vals = [pad_value] * pad_len + vals
+            elif len(vals) > timesteps:
+                # keep the most recent `timesteps` values
+                vals = vals[-timesteps:]
 
             # Build input array: shape (1, timesteps, features)
             arr = np.array(vals, dtype=float).reshape(1, timesteps, 1)
